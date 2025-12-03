@@ -7,7 +7,8 @@ export default function Home() {
 
     const addToCart = useCartStore(state => state.addToCart)
     const removeFromCart = useCartStore(state => state.removeFromCart)
-    const clearCart = useCartStore()
+    const clearCart = useCartStore(state => state.clearCart)
+    const cart = useCartStore(state => state.cart)
 
   const renderItem = ({ item }) => {
     return (
@@ -22,6 +23,7 @@ export default function Home() {
             <TouchableOpacity style={styles.button}>
               <Ionicons name="add-outline" size={30} color="black" onPress={() => addToCart(item)}/>
             </TouchableOpacity>
+             <Text style={styles.itemQuantity}>{cart.find(cartItem => cartItem.id === item.id)?.quantity || 0}</Text>
             <TouchableOpacity style={styles.button}>
               <Ionicons name="remove-outline" size={30} color="black" onPress={() => removeFromCart(item.id)}/>
             </TouchableOpacity>
@@ -88,7 +90,9 @@ const styles = StyleSheet.create(
       backgroundColor: '#f0f0f0',
       padding: 2,
       borderRadius: 5
+    },
+    itemQuantity: {
+      fontSize: 18,
     }
-
   })
 
