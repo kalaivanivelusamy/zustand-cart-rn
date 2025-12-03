@@ -1,8 +1,13 @@
 import data from '@/data/data.json'
 import { Ionicons } from '@expo/vector-icons'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useCartStore } from '../store/cartStore'
 
 export default function Home() {
+
+    const addToCart = useCartStore(state => state.addToCart)
+    const removeFromCart = useCartStore(state => state.removeFromCart)
+    const clearCart = useCartStore()
 
   const renderItem = ({ item }) => {
     return (
@@ -15,10 +20,10 @@ export default function Home() {
           <Text style={styles.itemPrice}>${item.price}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button}>
-              <Ionicons name="add-outline" size={30} color="black" />
+              <Ionicons name="add-outline" size={30} color="black" onPress={() => addToCart(item)}/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-              <Ionicons name="remove-outline" size={30} color="black" />
+              <Ionicons name="remove-outline" size={30} color="black" onPress={() => removeFromCart(item.id)}/>
             </TouchableOpacity>
           </View>
         </View>
