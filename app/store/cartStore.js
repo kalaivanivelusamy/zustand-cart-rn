@@ -8,31 +8,34 @@ export const useCartStore = create((set) => ({
         state.itemsCount += 1;
         const existing = state.cart.find((item) => item.id === product.id);
 
-      if (existing) {
-        // Increase quantity
-        return {
-          cart: state.cart.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
-      }
+        if (existing) {
+            // Increase quantity
+            return {
+                cart: state.cart.map((item) =>
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                ),
+            };
+        }
 
-      // Add new item
-      return {
-        cart: [...state.cart, { ...product, quantity: 1 }],
-      };
+        // Add new item
+        return {
+            cart: [...state.cart, { ...product, quantity: 1 }],
+        };
     }),
 
     removeFromCart: (itemId) => set((state) => {
         const existing = state.cart.find((item) => item.id === itemId);
-        existing.quantity -= 1;
+        if (!existing) {
+            return state; // Item not found, no changes
+        }
 
-        if (existing.quantity > 0) {
+        const newQty = existing.quantity - 1;
+        if (newQty > 0) {
             const updatedCart = state.cart.map((item) =>
                 item.id === itemId
-                    ? { ...item, quantity: item.quantity }
+                    ? { ...item, quantity: newQty }
                     : item
             );
             return {
@@ -46,7 +49,7 @@ export const useCartStore = create((set) => ({
                 itemsCount: state.itemsCount - 1 >= 0 ? state.itemsCount - 1 : 0
             }
         }
-        
+
     }),
 
     clearCart: () => set(() => ({
