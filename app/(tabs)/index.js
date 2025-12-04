@@ -93,6 +93,7 @@ const styles = StyleSheet.create(
     },
     itemQuantity: {
       fontSize: 18,
+      fontWeight: '600'
     }
   })
 
