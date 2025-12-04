@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import { zustandStorage } from './mmkv';
 
-export const useCartStore = create((set) => ({
+export const useCartStore = create(persist((set,get) => ({
     cart: [],
     itemsCount: 0,
 
@@ -56,6 +58,10 @@ export const useCartStore = create((set) => ({
         cart: [],
         itemsCount: 0
 
-    }
-    ))
-}));
+    }),
+)}),
+{
+    name: 'cart-storage',
+    storage: createJSONStorage(() => zustandStorage),
+}
+));
